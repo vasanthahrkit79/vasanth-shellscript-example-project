@@ -10,15 +10,32 @@ pipeline {
             ''' 
             }
         }
-        stage('Test') {
+        stage('Memory utilization by files and free memory') {
             steps {
-                echo 'Testing..'
+                echo "memory utilization by files"
+                df -kh
+                du -h
+
             }
         }
-        stage('Deploy') {
+        stage('CPU details') {
             steps {
-                echo 'Deploying....'
+                echo 'CPU details'
+                lscpu
             }
         }
-    }
-}
+       stage('Memory details') {
+            steps {
+                echo 'Memory details'
+                free -h
+            }
+    
+        }
+      stage('running process details') {
+            steps {
+                echo 'process details'
+                ps -ef
+                  }
+        }
+   }
+}  
