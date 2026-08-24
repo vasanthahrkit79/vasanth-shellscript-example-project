@@ -12,30 +12,38 @@ pipeline {
         }
         stage('Memory utilization by files and free memory') {
             steps {
+              sh '''
                 echo "memory utilization by files"
                 df -kh
                 du -h
+              '''
 
             }
         }
         stage('CPU details') {
             steps {
+             sh '''
                 echo 'CPU details'
                 lscpu
+             '''
             }
         }
        stage('Memory details') {
             steps {
+              sh '''
                 echo 'Memory details'
                 free -h
+             '''
             }
     
         }
       stage('running process details') {
             steps {
+               sh '''
                 echo 'process details'
                 ps -ef
-                  }
-        }
+              ''' 
+            }
+        }   
    }
 }  
