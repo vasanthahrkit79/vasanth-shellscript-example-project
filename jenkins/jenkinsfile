@@ -6,7 +6,8 @@ pipeline {
             steps {
             sh '''
               echo "system uptime is"
-              uptime
+              uptime 
+              date
             ''' 
             }
         }
