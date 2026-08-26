@@ -54,7 +54,7 @@ agent {
       }
  
   stages{ 
-  stage(get the hostname)
+  stage('get the hostname')
    { steps{
       sh'''
       hostname -I
