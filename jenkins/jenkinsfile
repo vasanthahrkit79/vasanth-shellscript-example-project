@@ -45,19 +45,6 @@ pipeline {
               ''' 
             }
         }   
-   }
-agent {
-      label'slave-2'
-      }
- 
-  stages{ 
-  stage('get the hostname')
-   { steps{
-      sh'''
-      hostname -I
-      '''
-       }
-     }
-  } 
+   } 
 }
 
