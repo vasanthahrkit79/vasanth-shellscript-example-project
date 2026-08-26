@@ -1,0 +1,7 @@
+Copy  private key of slave node and past to ssh private key space while configuration password in the master jenkins.
+Copy public key of slave node and past in the authorized key in the slave node
+Hostname should be public ip
+// or///
+copy the master public key and past in the slave authenticate key.
+Copy past the private key of master  node to ssh private key space while configuration password  in the jenkins.
+Hostname should be public IP
