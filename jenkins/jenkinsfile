@@ -1,66 +1,49 @@
 pipeline {
-    agent {
-            label'slave-1'
-       }
-
-    stages {
-        stage('Build') {
-            steps {
-            sh '''
-              echo "system uptime is"
-              uptime 
-              date
-            ''' 
-            }
-        }
-        stage('Memory utilization by files and free memory') {
-            steps {
-              sh '''
-                echo "memory utilization by files"
-                df -kh
-                du -h
-              '''
-
-            }
-        }
-        stage('CPU details') {
-            steps {
-             sh '''
-                echo 'CPU details'
-                lscpu
-             '''
-            }
-        }
-       stage('Memory details') {
-            steps {
-              sh '''
-                echo 'Memory details'
-                free -h
-             '''
-            }
+    agent none 
     
-        }
-      stage('running process details') {
-            steps {
-               sh '''
-                echo 'process details'
-                ps -ef
-              ''' 
+    stages {
+        stage('Slave 1 Tasks') {
+            agent { label 'slave-1' }
+            stages {
+                stage('Build') {
+                    steps {
+                        sh 'uptime'
+                        sh 'date'
+                    }
+                }
+                stage('Memory utilization by files') {
+                    steps {
+                        sh 'df -kh'
+                        sh 'du -h --max-depth=1'
+                    }
+                }
+                stage('CPU details') {
+                    steps {
+                        sh 'lscpu'
+                    }
+                }
+                stage('Memory details') {
+                    steps {
+                        sh 'free -h'
+                    }
+                }
+                stage('Running process details') {
+                    steps {
+                        sh 'ps -ef'
+                    }
+                }
             }
-        }   
-   }
-agent {
-      label'slave-2'
-      }
- 
-  stages{ 
-  stage('get the hostname')
-   { steps{
-      sh'''
-      hostname -I
-      '''
-       }
-     }
-  } 
+        }
+        
+        stage('Slave 2 Tasks') {
+            agent { label 'slave-2' }
+            stages {
+                stage('Get the hostname') {
+                    steps {
+                        sh 'hostname -I'
+                    }
+                }
+            }
+        }
+    }
 }
-
