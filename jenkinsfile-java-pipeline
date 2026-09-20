@@ -1,0 +1,67 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('clone the repo') {
+            steps {
+                git branch: 'main', changelog: false, poll: false, url: 'https://github.com/vasanthahrkit79/jenkins-tutorial.git'
+            }
+        }
+        stage('build using maven') {
+            steps {
+                dir('3-java-jenkins-docker-app') {
+                    sh 'mvn clean package'
+                }
+            }
+        }
+         stage('Test the junit') {
+            steps {
+                dir('3-java-jenkins-docker-app') {
+                   sh 'mvn test'
+                }
+            }
+        }
+        stage('compile the app') {
+            steps {
+                dir('3-java-jenkins-docker-app') {
+                   sh 'mvn compile'
+                }
+            }
+        }
+        stage('docker image build') {
+            steps {
+                dir('3-java-jenkins-docker-app') {
+                  sh 'docker build -t java-jenkins-docker:latest .'
+                }
+            }
+        }
+        stage('attach the tag to docker container') {
+            steps {
+                dir('3-java-jenkins-docker-app') {
+                  sh 'docker tag java-jenkins-docker:latest vasanthakumara79/java-jenkins-docker:latest'
+                }
+            }
+        }
+         stage('login to docker hub'){
+            steps {
+                dir('3-java-jenkins-docker-app') {
+                  sh 'docker login -u vasanthakumara79 -p $Docker_Password'
+                } 
+            }
+        } 
+        stage('push the docker image to hub'){
+            steps {
+                dir('3-java-jenkins-docker-app') {
+                  sh 'docker push vasanthakumara79/java-jenkins-docker:latest '
+                } 
+            }
+        }  
+        stage('clean the workspace'){
+            steps {
+                dir('3-java-jenkins-docker-app') {
+                    cleanWs()
+                } 
+            }
+        }    
+    }  
+}
