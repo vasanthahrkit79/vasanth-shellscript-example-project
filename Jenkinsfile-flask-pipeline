@@ -29,9 +29,24 @@ pipeline {
         }
         stage('Docker push') {
             steps {
-               sh 'docker login -u $Docker_login_cred_USR -p $Docker_login_cred_PSW '
+               sh 'docker login -u "$Docker_login_cred_USR" -p "$Docker_login_cred_PSW" '
                sh 'docker push $IMAGE_NAME:$BUILD_NUMBER'
             }
         }
-    }
-}
+    
+        stage('Deploy the image'){
+            steps{
+                sh 'docker run -d -p 5000:5000 $IMAGE_NAME:$BUILD_NUMBER '
+            }
+        }
+    } 
+    post {
+         success{ 
+             echo 'build success' 
+         }
+         failure{ 
+             echo 'build failure' 
+         }
+     }
+  }
+
