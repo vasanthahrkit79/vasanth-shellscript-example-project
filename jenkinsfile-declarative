@@ -8,12 +8,12 @@ pipeline {
             }
         }
         stage("test stage"){
-            step{
+            steps{
                 echo "test stage"
             }
         }
         stage("deploy stage"){
-            step{
+            steps{
                 echo "deploy stage"
             }    
         }
