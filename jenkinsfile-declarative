@@ -2,6 +2,14 @@ pipeline {
     agent any
 
     stages{
+        stage("java version"){
+            steps{
+                sh '''
+                   javac --version
+                   java  --version
+                  '''
+            }
+        }
         stage("build stage"){
             steps{
                 echo "build stage"
