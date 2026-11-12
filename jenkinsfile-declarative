@@ -10,6 +10,14 @@ pipeline {
                   '''
             }
         }
+        stage("java version"){
+            steps{
+                sh '''
+                   javac HelloWorld.java
+                   java  HelloWorld.java
+                  '''
+            }
+        }
         stage("build stage"){
             steps{
                 echo "build stage"
