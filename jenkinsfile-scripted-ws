@@ -1,5 +1,7 @@
 node {
-    stage('buil stage'){
-      echo " Hello word"
+    stage('Hello stage'){
+     sh ''' 
+     echo " Hello word"
+     '''
     }
 }
