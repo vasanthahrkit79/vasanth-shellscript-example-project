@@ -1,0 +1,63 @@
+pipeline {
+    agent any
+
+    stages {
+        stage("clone the repo") {
+            steps {
+                git branch: 'main', changelog: false, poll: false, url: 'https://github.com/vasanthahrkit79/jenkins-tutorial.git'
+            }
+        }
+        stage("build") {
+            steps {
+                dir('4-python-jenkins-docker-app') {
+                    sh 'python3 -m py_compile app.py'
+                }
+            }
+        }
+        stage("docker build image") {
+            steps {
+                dir('4-python-jenkins-docker-app') {
+                    sh 'docker build -t python-app:latest .'
+                }
+            }
+        }
+         stage("run  the container ") {
+            steps {
+                dir('4-python-jenkins-docker-app') {
+                    sh 'docker run --rm python-app:latest '
+                }
+            }
+        }
+        stage('move docker container image to hub') {
+            steps {
+                dir('4-python-jenkins-docker-app') {
+                    withCredentials([usernamePassword(credentialsId: 'Vasanthakumara79', 
+                                                      passwordVariable: 'Docker_Password', 
+                                                      usernameVariable: 'Docker_Username')]) {
+                        sh ''' 
+                            echo "$Docker_Password" | docker login -u "$Docker_Username" --password-stdin
+                            docker tag python-app:latest vasanthakumara79/python-app:latest
+                            docker push vasanthakumara79/python-app:latest
+                          '''
+                    }
+                }
+            }
+        }
+        stage("clear workspace ") {
+            steps {
+                cleanWs()
+            }
+        }
+    }
+post {
+    success{
+        echo "pipe line success"
+    }
+    failure{
+        echo "pipe line failes"
+    }
+     always{
+         sh ' docker logout'
+     }
+  }
+}
